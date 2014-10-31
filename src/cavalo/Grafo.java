@@ -22,7 +22,7 @@ public class Grafo {
 	}
     }
     
-    public void adicionarVertice(int vertice1, int vertice2) {
+    public void adicionarAresta(int vertice1, int vertice2) {
 	if (vertice1 >= nos.size() || vertice2 >= nos.size())
 	    return;
 	if (this.estaConectado(vertice1, vertice2))
