@@ -22,18 +22,15 @@ public class Grafo {
 	}
     }
     
-    public void AdicionarVertice(int vertice1, int vertice2) {
+    public void adicionarVertice(int vertice1, int vertice2) {
 	if (vertice1 >= nos.size() || vertice2 >= nos.size())
 	    return;
 	if (this.estaConectado(vertice1, vertice2))
 	    return;
 	nos.get(vertice1).add(vertice2);
-	nos.get(vertice2).add(vertice1);
     }
     
     public boolean estaConectado(int vertice1, int vertice2) {
-	if (nos.get(vertice2).contains(vertice1) && nos.get(vertice1).contains(vertice2))
-	    return true;
-	return false;
+	return nos.get(vertice1).contains(vertice2);
     }
 }
