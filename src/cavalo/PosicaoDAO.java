@@ -1,9 +1,12 @@
 package JDBC;
 
 import java.util.ArrayList;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+
 
 
 
@@ -19,7 +22,7 @@ public class PosicaoDAO
 	{
 		FabricaConexoes fabrica=new FabricaConexoes();
 		Statement stmt=fabrica.conexao().createStatement();
-		int rs=stmt.executeUpdate("INSERT INTO movimentos VALUES (" + position.getX() + ","+ position.getY()+")");
+		int rs=stmt.executeUpdate("INSERT INTO movimentos (x,y) values (" + position.getX() + ","+ position.getY()+")");
 		
 		if(rs==0)
 			System.out.println("insert informa: INSERCAO NAO REALIZADA");
@@ -27,17 +30,7 @@ public class PosicaoDAO
 			System.out.println("insert informa: INSERCAO REALIZADA COM SUCESSO");
 	}
 	
-	void delete(Posicao position) throws ClassNotFoundException, SQLException
-	{
-		FabricaConexoes fabrica=new FabricaConexoes();
-		Statement stmt=fabrica.conexao().createStatement();
-		int rs=stmt.executeUpdate("DELETE FROM movimentos WHERE x="+ position.getX()+ "and y=" + position.getY());
-		
-		if(rs==0)
-			System.out.println("delete informa: MOVIMENTO NAO DELETADO");
-		else
-			System.out.println("delete informa: MOVIMENTO DELETADO COM SUCESSO");
-	}
+	
 	public void findALL() throws ClassNotFoundException, SQLException
 	{
 		ArrayList<Posicao> lista=new ArrayList<Posicao>();
@@ -52,7 +45,23 @@ public class PosicaoDAO
 		
 		
 		for(int i=0;i<lista.size();i++)
-			System.out.println("Movimento x="+lista.get(i).getX()+","+"y="+lista.get(i).getY());
+			System.out.println("Movimento " + (i+1)+" x="+lista.get(i).getX()+","+"y="+lista.get(i).getY());
 	}
+	
+	public void InsereList(List<Posicao> lista) throws ClassNotFoundException, SQLException
+	{
+		FabricaConexoes fabrica=new FabricaConexoes();
+		PreparedStatement st= fabrica.conexao().prepareStatement("INSERT INTO movimentos (x,y) VALUES (?,?)");
+		
+		for(Posicao p:lista)
+		{
+			st.setInt(1,p.getX());
+			st.setInt(2,p.getY());
+			boolean deuCerto=(st.executeUpdate()==1);
+		}
+		
+		st.close();
+	}
+	
 	
 }
