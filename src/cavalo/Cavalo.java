@@ -5,6 +5,8 @@
  */
 package cavalo;
 
+import java.util.List;
+
 /**
  *
  * @author rafaelpaiva
@@ -15,7 +17,18 @@ public class Cavalo {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-	// TODO code application logic here
+	Grafo grafo = new Grafo(64);
+	
+	Utils.popularGrafo(grafo);
+	
+	for (int i = 0; i < 64; i++) {
+	    System.out.print(Utils.toPonto(i)+" => ");
+	    List<Integer> viz = grafo.vizinhos(i);
+	    for (Integer j: viz) {
+		System.out.print(Utils.toPonto(j) + " ");
+	    }
+	    System.out.println("");
+	}
     }
     
 }
