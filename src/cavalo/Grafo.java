@@ -15,9 +15,11 @@ import java.util.List;
 public class Grafo {
 
     private final List<List<Integer>> nos;
+    private final int linha;
 
     public Grafo(int linha) {
 	nos = new ArrayList<>(linha*linha);
+	this.linha = linha;
 	for (int i = 0; i < (linha*linha); i++) {
 	    nos.add(new ArrayList<Integer>());
 	}
@@ -52,5 +54,8 @@ public class Grafo {
     public int tamanho() {
 	return nos.size();
     }
-
+    
+    public int linha() {
+	return linha;
+    }
 }

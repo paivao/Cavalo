@@ -31,4 +31,5 @@ public class Posicao {
     public String toString() {
 	return "(" + (this.x+1) + "," + (this.y+1) + ")";
     }
+
 }

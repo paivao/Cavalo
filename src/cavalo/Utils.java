@@ -8,6 +8,7 @@ package cavalo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -17,14 +18,16 @@ import java.util.List;
 public class Utils {
 
     private static int modulo;
-    
-    public static String getLetter (int n) {
+
+    public static String getLetter(int n) {
 	n--;
-	if (n < 0) return "";
+	if (n < 0) {
+	    return "";
+	}
 	final String alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	return getLetter(n/26)+alfabeto.charAt(n%26);
+	return getLetter(n / 26) + alfabeto.charAt(n % 26);
     }
-    
+
     static void setModulo(int modulo) {
 	Utils.modulo = modulo;
     }
@@ -96,7 +99,7 @@ public class Utils {
 	    }
 	    caminho.set(pos, v);
 
-		//System.out.println(pos);
+	    //System.out.println(pos);
 	    if (hamiltonianUtil(g, caminho, pos + 1, cycle)) {
 		//System.out.println(Utils.toPosicao(caminho.get(pos-1)) + "B");
 		return true;
@@ -107,6 +110,7 @@ public class Utils {
 	return false;
     }
 
+    @Deprecated
     public static List<Posicao> hamiltonianPath(Grafo g, Posicao inicio, boolean cycle) {
 	//Utils.ordenarGrafo(g);
 	List<Integer> caminho = new ArrayList<>();
@@ -126,44 +130,45 @@ public class Utils {
 
 	return caminhoPronto;
     }
-
-    @SuppressWarnings("empty-statement")
-    @Deprecated
-    static public synchronized List<Integer> cicloEuleriano(Grafo g, Integer inicial) {
-	List<Integer> ciclo = new ArrayList<>();
-	List<Integer> vizinhos;
-	int k, pos = inicial, p2;
-	ciclo.add(pos);
-	boolean[][] arestas = new boolean[64][8];
-	while (true) {
-	    System.out.println(toPosicao(pos));
-	    vizinhos = g.vizinhos(pos);
-	    for (k = 0; k < vizinhos.size(); k++) {
-		if (!arestas[pos][k]) {
-		    break;
-		}
-	    }
-	    if (k == vizinhos.size()) {
-ciclo:
-		for (p2 = 0; p2 < ciclo.size(); p2++) {
-		    pos = ciclo.get(p2);
-		    vizinhos = g.vizinhos(pos);
-		    for (k = 0; k < vizinhos.size(); k++) {
-			if (!arestas[pos][k]) {
-			    break ciclo;
-			}
-		    }
-		}
-		if (pos == ciclo.size()) {
-		    break;
-		}
-	    }
-	    arestas[pos][k] = true;
-	    pos = g.vizinhos(pos).get(k);
-	    ciclo.add(pos);
-	}
-	return ciclo;
-    }
+    /*
+     @SuppressWarnings("empty-statement")
+     @Deprecated
+     static public synchronized List<Integer> cicloEuleriano(Grafo g, Integer inicial) {
+     List<Integer> ciclo = new ArrayList<>();
+     List<Integer> vizinhos;
+     int k, pos = inicial, p2;
+     ciclo.add(pos);
+     boolean[][] arestas = new boolean[64][8];
+     while (true) {
+     System.out.println(toPosicao(pos));
+     vizinhos = g.vizinhos(pos);
+     for (k = 0; k < vizinhos.size(); k++) {
+     if (!arestas[pos][k]) {
+     break;
+     }
+     }
+     if (k == vizinhos.size()) {
+     ciclo:
+     for (p2 = 0; p2 < ciclo.size(); p2++) {
+     pos = ciclo.get(p2);
+     vizinhos = g.vizinhos(pos);
+     for (k = 0; k < vizinhos.size(); k++) {
+     if (!arestas[pos][k]) {
+     break ciclo;
+     }
+     }
+     }
+     if (pos == ciclo.size()) {
+     break;
+     }
+     }
+     arestas[pos][k] = true;
+     pos = g.vizinhos(pos).get(k);
+     ciclo.add(pos);
+     }
+     return ciclo;
+     }
+     */
 
     public static void ordenarGrafo(final Grafo g) {
 	for (int i = 0; i < g.tamanho(); i++) {
@@ -175,5 +180,173 @@ ciclo:
 	    }
 	    );
 	}
+    }
+
+    private static void findAPath(final Grafo g, List<Integer> caminho, List<Integer> proibidos) {
+	Integer proximo = null;
+	int minimo = g.tamanho(), unvisited;
+	for (Integer w : g.vizinhos(caminho.get(caminho.size() - 1))) {
+	    if (caminho.contains(w)) {
+		continue;
+	    }
+	    if (proibidos != null) {
+		if (proibidos.contains(w)) {
+		    continue;
+		}
+	    }
+
+	    unvisited = 0;
+	    for (Integer i : g.vizinhos(w)) {
+		if (!caminho.contains(i)) {
+		    unvisited++;
+		}
+	    }
+
+	    if (unvisited < minimo) {
+		minimo = unvisited;
+		proximo = w;
+	    }
+	}
+	if (proximo != null) {
+	    caminho.add(proximo);
+	    findAPath(g, caminho, proibidos);
+	}
+    }
+
+    private static void extendPath(Grafo g, List<Integer> caminho) {
+	Integer next = null;
+	for (Integer v : caminho) {
+	    if (g.estaConectado(v, caminho.get(caminho.size() - 1))) { //Vi
+		int index = caminho.indexOf(v); //Vi+1
+		int unvisited, maxEta = 0;
+		for (Integer w : g.vizinhos(caminho.get(index + 1))) { //Checando se Vi+1 tem vizinhos não visitados
+		    if (caminho.contains(w)) {
+			continue;
+		    }
+		    unvisited = 0;
+		    for (Integer m : g.vizinhos(w)) {    //eta de w
+			if (!caminho.contains(m)) {
+			    unvisited++;
+			}
+		    }
+		    if (unvisited > maxEta) {
+			next = w;
+			maxEta = unvisited;
+		    }
+		}
+		if (next != null) {
+		    //Reorganizar o caminho
+		    Collections.reverse(caminho.subList(index + 1, caminho.size()));
+		    caminho.add(next);
+		    findAPath(g, caminho, null);
+		    extendPath(g, caminho);
+		    break;
+		}
+	    }
+	}
+    }
+
+    private static void extendFutherPath(Grafo g, List<Integer> caminho, boolean tenteOutraVez) {
+	List<Integer> caminho_extra = null;
+	Integer inicial = null;
+encontrar_inicial:
+	for (Integer v : caminho.subList(0, caminho.size() - 2)) {
+	    for (Integer w : g.vizinhos(v)) {
+		if (!caminho.contains(w)) {
+		    inicial = w;
+		    break encontrar_inicial;
+		}
+	    }
+	}
+	if (inicial != null) {
+	    caminho_extra.add(inicial);
+	    findAPath(g, caminho_extra, caminho);
+	    if (caminho_extra.size() > 1) {
+		Integer conexao = null;
+trim:
+		while (caminho_extra.size() > 1) {
+		    for (Integer j : g.vizinhos(caminho_extra.get(caminho.size() - 1))) {
+			if (caminho.subList(inicial + 1, caminho.size()).contains(j)) {
+			    if (g.estaConectado(inicial + 1, j + 1)) {
+				conexao = j;
+				break trim;
+			    }
+			}
+		    }
+		    if (conexao == null) {
+			caminho_extra.remove(caminho_extra.size() - 1);
+		    }
+		}
+		if (conexao != null) {
+		    Collections.reverse(caminho.subList(inicial + 1, conexao));
+		    caminho.addAll(inicial + 1, caminho_extra);
+		    extendFutherPath(g, caminho, true);
+		}
+	    }
+	}
+	if (inicial == null && tenteOutraVez) {
+	    Collections.reverse(caminho);
+	    extendFutherPath(g, caminho, false);
+	}
+    }
+
+    public static List<Posicao> hamiltonianPathOrCycle(final Grafo g, boolean cycle) {
+	List<Integer> caminho = new LinkedList<>();
+	if (!cycle) {
+	    caminho.add(toIndice(new Posicao(g.linha() / 2, g.linha() / 2)));
+	    findAPath(g, caminho, null);
+	    extendPath(g, caminho);
+	    extendFutherPath(g, caminho, false);
+	}
+
+	//Se quer ciclo
+	if (cycle) {
+	    List<Integer> nos = new ArrayList<>();
+	    for (int i = 0; i < g.tamanho(); i++) {
+		nos.add(i);
+	    }
+
+	    Collections.sort(nos, new Comparator<Integer>() {
+
+		@Override
+		public int compare(Integer o1, Integer o2) {
+		    return g.vizinhos(o2).size() - g.vizinhos(o1).size();
+		}
+
+	    });
+
+	    System.out.println(nos.get(0));
+	    System.out.println(nos.get(nos.size()-1));
+ciclo:
+	    for (Integer no : nos) {
+		caminho.clear();
+
+		caminho.add(no);
+		findAPath(g, caminho, null);
+		extendPath(g, caminho);
+		extendFutherPath(g, caminho, false);
+
+		for (int i = 0; i < g.tamanho(); i++) {
+		    if (g.estaConectado(0, i + 1) && g.estaConectado(i, g.tamanho() - 1)) {
+			cycle = false;
+			Collections.reverse(caminho.subList(i + 1, g.tamanho()));
+			break ciclo;
+		    }
+		}
+		//caminho.clear();
+	    }
+	}
+	
+	System.out.println(caminho.get(0));
+
+	List<Posicao> caminho_pronto = new LinkedList<>();
+	for (Integer i : caminho) {
+	    caminho_pronto.add(toPosicao(i));
+	}
+
+	if (cycle) {
+	    System.out.println("Não acho ciclo");
+	}
+	return caminho_pronto;
     }
 }

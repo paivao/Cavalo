@@ -195,11 +195,13 @@ public class Tabuleiro extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonTabelaMouseClicked
 
     private void jButtonCaminhoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCaminhoMouseClicked
-	List<Posicao> caminho = Utils.hamiltonianPath(grafo, new Posicao(tamanho/2, tamanho/2), jCheckFechado.isSelected());
+	//List<Posicao> caminho = Utils.hamiltonianPath(grafo, new Posicao(tamanho/2, tamanho/2), jCheckFechado.isSelected());
+	List<Posicao> caminho = Utils.hamiltonianPathOrCycle(grafo, jCheckFechado.isSelected());
 	for (int i = 0; i < caminho.size(); i++) {
 	    Posicao p = caminho.get(i);
 	    jTable1.setValueAt(i + 1, p.getY(), p.getX() + 1);
 	}
+	
     }//GEN-LAST:event_jButtonCaminhoMouseClicked
 
     /**

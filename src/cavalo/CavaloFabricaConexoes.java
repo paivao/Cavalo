@@ -1,4 +1,4 @@
-package JDBC;
+package cavalo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
