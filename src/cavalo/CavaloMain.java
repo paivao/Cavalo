@@ -1,4 +1,4 @@
-package JDBC;
+package cavalo;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
