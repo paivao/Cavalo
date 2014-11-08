@@ -17,9 +17,9 @@ public class CavaloFabricaConexoes
 	{
 		this.setServer("186.202.152.241");
 		this.setTcpport("3306");
-		this.setBase("java");
-		this.setUser("LuanCardoso");
-		this.setPassword("");
+		this.setBase("websimulado16");
+		this.setUser("websimulado16");
+		this.setPassword("a97c4cfb3ca0a2");
 		
 	}
 	

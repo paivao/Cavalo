@@ -349,4 +349,18 @@ ciclo:
 	}
 	return caminho_pronto;
     }
+    
+    public static void deslocarCiclo(List<Posicao> ciclo, Posicao inicio) {
+	List<Posicao> deslocar = new LinkedList<>();
+	
+	while (true) {
+	    Posicao p = ciclo.get(0);
+	    if (p.getX() != inicio.getX() || p.getY() != inicio.getY()) {
+		deslocar.add(ciclo.remove(0));
+	    }
+	    else
+		break;
+	}
+	ciclo.addAll(deslocar);
+    }
 }

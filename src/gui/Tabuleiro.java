@@ -8,8 +8,12 @@ package gui;
 import cavalo.Utils;
 import cavalo.Grafo;
 import cavalo.Posicao;
+import cavalo.PosicaoDAO;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -157,6 +161,14 @@ public class Tabuleiro extends javax.swing.JFrame {
 	}
 
 	this.tamanho = tamanho;
+	
+	try {
+	    (new PosicaoDAO()).findALL();
+	} catch (ClassNotFoundException ex) {
+	    Logger.getLogger(Tabuleiro.class.getName()).log(Level.SEVERE, null, ex);
+	} catch (SQLException ex) {
+	    Logger.getLogger(Tabuleiro.class.getName()).log(Level.SEVERE, null, ex);
+	}
 
 	Object[][] data = new Object[tamanho][tamanho + 1];
 	for (Object[] linha : data) {
@@ -197,11 +209,18 @@ public class Tabuleiro extends javax.swing.JFrame {
     private void jButtonCaminhoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCaminhoMouseClicked
 	//List<Posicao> caminho = Utils.hamiltonianPath(grafo, new Posicao(tamanho/2, tamanho/2), jCheckFechado.isSelected());
 	List<Posicao> caminho = Utils.hamiltonianPathOrCycle(grafo, jCheckFechado.isSelected());
+	Utils.deslocarCiclo(caminho, new Posicao(0, 0));
 	for (int i = 0; i < caminho.size(); i++) {
 	    Posicao p = caminho.get(i);
 	    jTable1.setValueAt(i + 1, p.getY(), p.getX() + 1);
 	}
-	
+	try {
+	    (new PosicaoDAO()).InsereList(caminho);
+	} catch (ClassNotFoundException ex) {
+	    Logger.getLogger(Tabuleiro.class.getName()).log(Level.SEVERE, null, ex);
+	} catch (SQLException ex) {
+	    Logger.getLogger(Tabuleiro.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }//GEN-LAST:event_jButtonCaminhoMouseClicked
 
     /**
