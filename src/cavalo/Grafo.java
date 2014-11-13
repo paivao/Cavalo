@@ -17,6 +17,10 @@ public class Grafo {
     private final List<List<Integer>> nos;
     private final int linha;
 
+    /**
+     * Construtor do grafo.
+     * @param linha quantidade de linhas
+     */
     public Grafo(int linha) {
 	nos = new ArrayList<>(linha*linha);
 	this.linha = linha;
@@ -26,6 +30,11 @@ public class Grafo {
 	Utils.setModulo(linha);
     }
 
+    /**
+     * Adiciona uma aresta ao grafo.
+     * @param vertice1 índice do vértice 1
+     * @param vertice2 índice do vértice 2
+     */
     public void adicionarAresta(int vertice1, int vertice2) {
 	if (verticeValido(vertice1) && verticeValido(vertice2))  {
 
@@ -36,10 +45,21 @@ public class Grafo {
 	}
     }
 
+    /**
+     * A lista com as posições dos vizinhos de um vértice desejado.
+     * @param vertice índice do vertice desejado
+     * @return a lista com os vizinhos
+     */
     public List<Integer> vizinhos(int vertice) {
 	return nos.get(vertice);
     }
 
+    /**
+     * Verificar se dois vértices estão conectados.
+     * @param vertice1 índice do primeiro vértice
+     * @param vertice2 índice do segundo vértice
+     * @return true se sim, false se não
+     */
     public boolean estaConectado(int vertice1, int vertice2) {
 	if (!(verticeValido(vertice1) && verticeValido(vertice2))) {
 	    return false;
@@ -47,14 +67,27 @@ public class Grafo {
 	return nos.get(vertice1).contains(vertice2);
     }
 
+    /**
+     * Verifica se um vértice pertence ao grafo.
+     * @param vertice índice do vértice
+     * @return true se pertence, false se não
+     */
     private boolean verticeValido(int vertice) {
 	return ((vertice >= 0) && (vertice < this.tamanho()));
     }
 
+    /**
+     * O tamanho do grafo.
+     * @return a quantidade de nós
+     */
     public int tamanho() {
 	return nos.size();
     }
     
+    /**
+     * A quantidade de linhas.
+     * @return quantidade de linhas
+     */
     public int linha() {
 	return linha;
     }

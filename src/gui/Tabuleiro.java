@@ -96,11 +96,6 @@ public class Tabuleiro extends javax.swing.JFrame {
                 jButtonTabelaMouseClicked(evt);
             }
         });
-        jButtonTabela.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonTabelaActionPerformed(evt);
-            }
-        });
 
         jLabel1.setText("Tamanho:");
 
@@ -145,10 +140,10 @@ public class Tabuleiro extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTabelaActionPerformed
-	// TODO add your handling code here:
-    }//GEN-LAST:event_jButtonTabelaActionPerformed
-
+    /**
+     * Montar a tabela do grafo com o tamanho informado.
+     * @param evt 
+     */
     private void jButtonTabelaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonTabelaMouseClicked
 	Integer tamanho;
 	try {
@@ -206,6 +201,10 @@ public class Tabuleiro extends javax.swing.JFrame {
 	Utils.popularGrafo(grafo);
     }//GEN-LAST:event_jButtonTabelaMouseClicked
 
+    /**
+     * Gera a caminho ou ciclo, de acordo com o informado pelo usuário, e coloca no banco de dados.
+     * @param evt 
+     */
     private void jButtonCaminhoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCaminhoMouseClicked
 	//List<Posicao> caminho = Utils.hamiltonianPath(grafo, new Posicao(tamanho/2, tamanho/2), jCheckFechado.isSelected());
 	List<Posicao> caminho = Utils.hamiltonianPathOrCycle(grafo, jCheckFechado.isSelected());
@@ -214,13 +213,13 @@ public class Tabuleiro extends javax.swing.JFrame {
 	    Posicao p = caminho.get(i);
 	    jTable1.setValueAt(i + 1, p.getY(), p.getX() + 1);
 	}
-	try {
+	/*try {
 	    (new PosicaoDAO()).InsereList(caminho);
 	} catch (ClassNotFoundException ex) {
 	    Logger.getLogger(Tabuleiro.class.getName()).log(Level.SEVERE, null, ex);
 	} catch (SQLException ex) {
 	    Logger.getLogger(Tabuleiro.class.getName()).log(Level.SEVERE, null, ex);
-	}
+	}*/
     }//GEN-LAST:event_jButtonCaminhoMouseClicked
 
     /**

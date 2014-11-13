@@ -9,10 +9,22 @@ import java.util.List;
 
 public class PosicaoDAO {
 
+    /**
+     * Cria uma posição.
+     * @param x o valor do eixo X da posição
+     * @param y o valor do eixo Y da posição
+     * @return a posição
+     */
     Posicao create(int x, int y) {
 	return new Posicao(x, y);
     }
 
+    /**
+     * Inserir uma posição no banco de dados.
+     * @param position a posição
+     * @throws SQLException
+     * @throws ClassNotFoundException 
+     */
     void insert(Posicao position) throws SQLException, ClassNotFoundException {
 	CavaloFabricaConexoes fabrica = new CavaloFabricaConexoes();
 	Statement stmt = fabrica.conexao().createStatement();
@@ -25,6 +37,11 @@ public class PosicaoDAO {
 	}
     }
 
+    /**
+     * Mostra todas as posições do banco de dados.
+     * @throws ClassNotFoundException
+     * @throws SQLException 
+     */
     public void findALL() throws ClassNotFoundException, SQLException {
 	List<Posicao> lista = new ArrayList<>();
 	CavaloFabricaConexoes fabrica = new CavaloFabricaConexoes();
@@ -40,6 +57,12 @@ public class PosicaoDAO {
 	}
     }
 
+    /**
+     * Insere no banco de dados uma lista de posições.
+     * @param lista a lista com as posições
+     * @throws ClassNotFoundException
+     * @throws SQLException 
+     */
     public void InsereList(List<Posicao> lista) throws ClassNotFoundException, SQLException {
 	CavaloFabricaConexoes fabrica = new CavaloFabricaConexoes();
 	PreparedStatement st = fabrica.conexao().prepareStatement("INSERT INTO movimentos (x,y) VALUES (?,?)");
